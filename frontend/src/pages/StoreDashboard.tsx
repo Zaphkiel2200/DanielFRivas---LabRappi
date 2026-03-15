@@ -1,10 +1,9 @@
 
-
 export default function StoreDashboard() {
   return (
     <div className="container">
       <header className="dashboard-header">
-        <h2>Mi Tienda</h2>
+        <h2>Tienda</h2>
         <button className="btn-secondary">Cerrar Sesión</button>
       </header>
       
