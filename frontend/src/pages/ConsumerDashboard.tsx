@@ -57,8 +57,8 @@ export default function ConsumerDashboard() {
         <button className="btn-secondary" onClick={handleLogout}>Cerrar Sesión</button>
       </header>
 
-      <div style={{ display: 'flex', gap: '20px', width: '100%', alignItems: 'flex-start' }}>
-        <div style={{ flex: 2 }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', width: '100%', alignItems: 'flex-start' }}>
+        <div style={{ flex: '1 1 300px' }}>
           <h3>Restaurantes y Productos disponibles</h3>
           <div style={{ display: 'grid', gap: '15px' }}>
             {MOCK_PRODUCTS.map((prod) => (
@@ -75,7 +75,7 @@ export default function ConsumerDashboard() {
             ))}
           </div>
         </div>
-        <div className="card" style={{ flex: 1, position: 'sticky', top: '20px' }}>
+        <div className="card" style={{ flex: '1 1 300px', position: 'sticky', top: '20px' }}>
           <h3>Mi Carrito</h3>
           {cart.length === 0 ? (
             <p style={{ color: '#666' }}>Tu carrito está vacío.</p>
