@@ -26,4 +26,12 @@ export class OrderService {
     this.orders.push(newOrder);
     return newOrder;
   }
+
+  updateOrderStatus(id: number, status: 'pending' | 'accepted' | 'delivered'): Order | undefined {
+    const orderIndex = this.orders.findIndex(o => o.id === id);
+    if (orderIndex === -1) return undefined;
+    
+    this.orders[orderIndex].status = status;
+    return this.orders[orderIndex];
+  }
 }

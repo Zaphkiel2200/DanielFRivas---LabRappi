@@ -42,4 +42,25 @@ export class OrderController {
 
     return res.status(201).json(order);
   };
+
+  updateOrderStatus = (req: Request, res: Response) => {
+    const id = parseInt(req.params.id as string, 10);
+    const { status } = req.body;
+
+    if (isNaN(id)) {
+      throw Boom.badRequest('El ID de la orden debe ser un número válido');
+    }
+
+    if (!['pending', 'accepted', 'delivered'].includes(status)) {
+      throw Boom.badRequest('El status proveído no es válido');
+    }
+
+    const order = this.orderService.updateOrderStatus(id, status);
+
+    if (!order) {
+      throw Boom.notFound('Orden no encontrada');
+    }
+
+    return res.json(order);
+  };
 }

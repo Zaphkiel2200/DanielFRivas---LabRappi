@@ -14,5 +14,6 @@ export class OrderRouter {
   private initializeRoutes() {
     this.router.get('/', this.orderController.getOrders);
     this.router.post('/', this.orderController.createOrder);
+    this.router.patch('/:id/status', this.orderController.updateOrderStatus);
   }
 }

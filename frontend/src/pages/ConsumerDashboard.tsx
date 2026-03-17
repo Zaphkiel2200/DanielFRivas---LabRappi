@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import api from '../services/api';
 
 interface Product {
   id: number;
@@ -12,15 +13,16 @@ interface CartItem extends Product {
   quantity: number;
 }
 
-const MOCK_PRODUCTS: Product[] = [
-  { id: 1, name: 'Hamburguesa Sencilla', price: 15000, storeName: 'Burger Palace' },
-  { id: 2, name: 'Papas Fritas', price: 5000, storeName: 'Burger Palace' },
-  { id: 3, name: 'Pizza Pepperoni', price: 25000, storeName: 'Luigi Pizza' },
-];
-
 export default function ConsumerDashboard() {
+  const [products, setProducts] = useState<Product[]>([]);
   const [cart, setCart] = useState<CartItem[]>([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    api.get('/products')
+      .then(res => setProducts(res.data))
+      .catch(err => console.error('Error cargando productos:', err));
+  }, []);
 
   const addToCart = (product: Product) => {
     setCart((prev) => {
@@ -40,8 +42,24 @@ export default function ConsumerDashboard() {
 
   const handleCheckout = () => {
     if (cart.length === 0) return;
-    alert(`Compra realizada con éxito! Total a pagar: $${total}`);
-    setCart([]); 
+    
+    // Simplification for the mockup: sending the first store available in the cart just to fulfill backend requirements.
+    const orderData = {
+      restaurant: cart[0].storeName,
+      customer: 'Cliente Generico', // Usually we get this from Auth context/state
+      address: 'Dirección Generica', // Usually we'd map this from a user form
+      total
+    };
+
+    api.post('/orders', orderData)
+      .then(() => {
+        alert(`Compra realizada con éxito! Total a pagar: $${total}`);
+        setCart([]); 
+      })
+      .catch((err) => {
+        alert('Hubo un error al crear la orden');
+        console.error(err);
+      });
   };
 
   const handleLogout = () => {
@@ -61,7 +79,7 @@ export default function ConsumerDashboard() {
         <div style={{ flex: '1 1 300px' }}>
           <h3>Restaurantes y Productos disponibles</h3>
           <div style={{ display: 'grid', gap: '15px' }}>
-            {MOCK_PRODUCTS.map((prod) => (
+            {products.map((prod) => (
               <div key={prod.id} className="card" style={{ padding: '15px', maxWidth: 'none' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
